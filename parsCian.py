@@ -16,27 +16,41 @@ desktop_agents = ['Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML
 def random_headers():
     return {'User-Agent': choice(desktop_agents), 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'}
 
-# url = 'https://www.kinopoisk.ru/lists/top250/'
-#
-# r = re.get(url, headers=random_headers())
-# soup = BeautifulSoup(r.text, 'lxml')
-# s = "https://www.kinopoisk.ru/lists/top250/"+soup.find('div', class_='desktop-rating-selection-film-item').find('a', class_='selection-film-item-meta__link').get('href')
-# # print(soup)
-# print(s)
-url = 'https://murmansk.cian.ru/kupit-kvartiru-1-komn-ili-2-komn/'
+url = 'https://murmansk.cian.ru/cat.php?deal_type=sale&engine_version=2&offer_type=flat&region=4594&room1=1&room2=1&room3=1&room4=1&room5=1&room6=1&room7=1&room9=1'
 r = re.get(url, headers=random_headers())
 soup = BeautifulSoup(r.text, 'lxml')
-# s = soup.find(
-#     'article', class_='_93444fe79c--container--Povoi _93444fe79c--cont--OzgVc').find(
-#     'div', class_='_93444fe79c--content--lXy9G').find('a', class_='_93444fe79c--link--eoxce').get('href')
-# print(s)
+data = []
+###############################################################################################
 s = soup.findAll('article', class_='_93444fe79c--container--Povoi _93444fe79c--cont--OzgVc')
 print(len(s))
-for s in s:
-    link = soup.find(
-        'article', class_='_93444fe79c--container--Povoi _93444fe79c--cont--OzgVc'
-    ).find(
+for i in s:
+    link = i.find(
         'a', class_='_93444fe79c--link--eoxce'
+    ).get('href')
+    #print(link)
+    gg = i.find('div', class_='_93444fe79c--labels--L8WyJ').findAll('a', class_='_93444fe79c--link--NQlVc')
+    # print(len(gg))
+    addres0 = i.find('div', class_='_93444fe79c--labels--L8WyJ').findAll('a', class_='_93444fe79c--link--NQlVc')[0].text
+    addres1 = i.find('div', class_='_93444fe79c--labels--L8WyJ').findAll('a', class_='_93444fe79c--link--NQlVc')[1].text
+    addres2 = i.find('div', class_='_93444fe79c--labels--L8WyJ').findAll('a', class_='_93444fe79c--link--NQlVc')[2].text
+    if len(gg) >= 4:
+        addres3 = i.find('div', class_='_93444fe79c--labels--L8WyJ').findAll('a', class_='_93444fe79c--link--NQlVc')[3].text
+    else:
+        addres3 = ''
+    if len(gg) >= 5:
+        addres4 = i.find('div', class_='_93444fe79c--labels--L8WyJ').findAll('a', class_='_93444fe79c--link--NQlVc')[4].text
+    else:
+        addres4 = ''
+    if len(gg) >= 6:
+        addres5 = i.find('div', class_='_93444fe79c--labels--L8WyJ').findAll('a', class_='_93444fe79c--link--NQlVc')[5].text
+    else:
+        addres5 = ''
+    #print(addres0+', '+addres1+', '+addres2+', '+addres3+', '+addres4+', '+addres5)
+    cena = i.find(
+        'div', class_='_93444fe79c--container--kZeLu _93444fe79c--link--DqDOy'
     ).find(
-    'div', class_='_93444fe79c--content--lXy9G')#.get('href')
-    print(link)
+        'div', class_='_93444fe79c--container--aWzpE'
+    ).findAll('span', class_='_93444fe79c--color_black_100--kPHhJ _93444fe79c--lineHeight_28px--whmWV _93444fe79c--fontWeight_bold--ePDnv _93444fe79c--fontSize_22px--viEqA _93444fe79c--display_block--pDAEx _93444fe79c--text--g9xAG _93444fe79c--text_letterSpacing__normal--xbqP6')
+    print(cena)
+    data.append([link, addres0+', '+addres1+', '+addres2+', '+addres3+', '+addres4+', '+addres5])
+print(data)
