@@ -45,12 +45,14 @@ for i in s:
         addres5 = i.find('div', class_='_93444fe79c--labels--L8WyJ').findAll('a', class_='_93444fe79c--link--NQlVc')[5].text
     else:
         addres5 = ''
-    #print(addres0+', '+addres1+', '+addres2+', '+addres3+', '+addres4+', '+addres5)
-    cena = i.find(
-        'div', class_='_93444fe79c--container--kZeLu _93444fe79c--link--DqDOy'
-    ).find(
-        'div', class_='_93444fe79c--container--aWzpE'
-    ).findAll('span', class_='_93444fe79c--color_black_100--kPHhJ _93444fe79c--lineHeight_28px--whmWV _93444fe79c--fontWeight_bold--ePDnv _93444fe79c--fontSize_22px--viEqA _93444fe79c--display_block--pDAEx _93444fe79c--text--g9xAG _93444fe79c--text_letterSpacing__normal--xbqP6')
-    print(cena)
-    data.append([link, addres0+', '+addres1+', '+addres2+', '+addres3+', '+addres4+', '+addres5])
+    r1 = re.get(link, headers=random_headers())
+    soup1 = BeautifulSoup(r1.text, 'lxml')
+    items = soup1.findAll('div', class_='a10a3f92e9--offer_card_page-center--DIv6H')
+    for item in items:
+        h1 = item.find('h1', class_='a10a3f92e9--title--UEAG3')
+        total_area = item.find('div', class_='a10a3f92e9--info-value--bm3DC')
+        print(total_area.text)
+    data.append(dict(link=link, titl=h1.text,
+                     addres=addres0 + ' ' + addres1 + ' ' + addres2 + ' ' + addres3 + ' ' + addres4 + ' ' + addres5,
+                     total_area=total_area.text))
 print(data)

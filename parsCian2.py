@@ -25,6 +25,34 @@ DESKTOP_AGENTS = ['Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML
                   'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0']
 
 
+
 def random_headers():
     return {'User-Agent': choice(DESKTOP_AGENTS),
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'}
+
+def get_html(url, params=None):
+    r = requests.get(url, headers=random_headers(), params=params)
+    return r
+
+def get_content(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    items = soup.findAll('article', class_='_93444fe79c--container--Povoi _93444fe79c--cont--OzgVc')
+    # items = soup.findAll('div', class_='_93444fe79c--card--ibP42 _93444fe79c--promoted--PnMmw')
+    room = []
+    for item in items:
+        link = item.find('a', class_='_93444fe79c--link--eoxce').get('href')
+        room.append({
+            'link': link
+        })
+        print(room)
+
+
+def parse():
+    html = get_html(URL)
+    print(html.status_code)
+    if html.status_code == 200:
+        # print(html.text)
+        get_content(html.text)
+    else:
+        print('Error')
+parse()
