@@ -1,6 +1,10 @@
 from random import choice
 import requests as re
 from bs4 import BeautifulSoup
+from proxyes2 import get_free_proxies
+import pandas as pd
+
+free_proxies = get_free_proxies()
 
 desktop_agents = ['Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 '
                   'Safari/537.36',
@@ -26,28 +30,34 @@ desktop_agents = ['Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML
 def random_headers():
     return {'User-Agent': choice(desktop_agents),
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'}
-
-
+data = []
+################################################
+# df = pd.DataFrame(free_proxies)
+# print(df[0])
+# for rec in df:
+#     print(rec)
+session = re.Session()
+session.proxies.update(free_proxies)
 url = 'https://www.avito.ru/murmanskaya_oblast/doma_dachi_kottedzhi'
 r = re.get(url, headers=random_headers())
-# print(r.text)
-soup = BeautifulSoup(r.text, 'lxml')
-s = soup.findAll('div', class_='iva-item-root-_lk9K photo-slider-slider-S15A_ iva-item-list-rfgcH '
-                               'iva-item-redesign-rop6P iva-item-responsive-_lbhG iva-item-ratingsRedesign-ydZfp '
-                               'items-item-My3ih items-listItem-Gd1jN js-catalog-item-enum')
-data = []
-print(len(s))
-for i in s:
-    link = 'https://www.avito.ru'+i.find(
-        'a', class_='iva-item-sliderLink-uLz1v'
-    ).get('href')
-    print(link)
-    r1 = re.get(link, headers=random_headers())
-    soup1 = BeautifulSoup(r1.text, 'lxml')
-    items = soup1.findAll('div', class_='item-view js-item-view  item-view__new-style')
-    for item in items:
-        numb = item.find('div', 'item-view-search-info-redesign').find('span', 'item-view/item-id')
-        print(numb)
-    data.append(dict(numb=numb, link=link))
-
-
+print(r.status_code)
+if r.status_code == 200:
+    soup = BeautifulSoup(r.text, 'lxml')
+    s = soup.findAll('div', class_='iva-item-root-_lk9K photo-slider-slider-S15A_ iva-item-list-rfgcH '
+                                   'iva-item-redesign-rop6P iva-item-responsive-_lbhG iva-item-ratingsRedesign-ydZfp '
+                                   'items-item-My3ih items-listItem-Gd1jN js-catalog-item-enum')
+    print(len(s))
+    for i in s:
+        link = 'https://www.avito.ru'+i.find(
+            'a', class_='iva-item-sliderLink-uLz1v'
+        ).get('href')
+        print(link)
+        r1 = re.get(link, headers=random_headers())
+        soup1 = BeautifulSoup(r1.text, 'lxml')
+        items = soup1.findAll('div', class_='item-view js-item-view  item-view__new-style')
+        for item in items:
+            numb = item.find('span', 'item-view/item-id').get_text()
+            #print(numb)
+            data.append(dict(link=link, numb=numb))
+    else:
+        print("Не работает")

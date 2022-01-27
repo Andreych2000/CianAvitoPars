@@ -1,6 +1,8 @@
 from random import choice
 import requests as re
 from bs4 import BeautifulSoup
+from proxybroker import Broker
+import asyncio
 
 desktop_agents = ['Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 '
                   'Safari/537.36',
@@ -26,11 +28,29 @@ desktop_agents = ['Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML
 def random_headers():
     return {'User-Agent': choice(desktop_agents),
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'}
+#####################################################################
+async def save(proxies, filename):
+    with open(filename, 'w') as f:
+        while True:
+            proxy = await proxies.get()
+            if proxy is None:
+                break
+            row = f'{proxy.host}:{proxy.port}\n'
+            f.write(row)
 
+
+def get_proxies(limit=1000):
+    proxies = asyncio.Queue()
+    broker = Broker(proxies)
+    tasks = asyncio.gather(broker.grab(limit=limit),
+                           save(proxies, filename='proxies.txt'))
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(tasks)
+#####################################################################
 
 url = 'https://murmansk.cian.ru/cat.php?deal_type=sale&engine_version=2&offer_type=flat&region=4594&room1=1&room2=1' \
       '&room3=1&room4=1&room5=1&room6=1&room7=1&room9=1 '
-r = re.get(url, headers=random_headers())
+r = re.get(url, headers=random_headers(), proxies=get_proxies())
 print(r.text)
 soup = BeautifulSoup(r.text, 'lxml')
 data = []
