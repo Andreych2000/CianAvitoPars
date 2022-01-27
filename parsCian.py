@@ -31,6 +31,7 @@ def random_headers():
 url = 'https://murmansk.cian.ru/cat.php?deal_type=sale&engine_version=2&offer_type=flat&region=4594&room1=1&room2=1' \
       '&room3=1&room4=1&room5=1&room6=1&room7=1&room9=1 '
 r = re.get(url, headers=random_headers())
+print(r.text)
 soup = BeautifulSoup(r.text, 'lxml')
 data = []
 ###############################################################################################
