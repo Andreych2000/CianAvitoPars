@@ -3,7 +3,7 @@ import requests as re
 from bs4 import BeautifulSoup
 from time import sleep
 import json
-import pdfkit
+# import pdfkit
 
 desktop_agents = ['Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 '
                   'Safari/537.36',
@@ -61,27 +61,30 @@ for p in range(1, int(pn2)+1):
             titl = i.find('h3', class_='title-root-zZCwT iva-item-title-py3i_ title-listRedesign-_rejR '
                                        'title-root_maxHeight-X6PsH text-text-LurtD text-size-s-BxGpL '
                                        'text-bold-SinUO').get_text().replace(' ', '').replace('\xa0', '')
-            o_txt = i.find('div',
-                           class_='iva-item-text-Ge6dR iva-item-description-FDgK4 text-text-LurtD text-size-s-BxGpL'
-                        ).get_text()
+            if i.find('div', class_='iva-item-text-Ge6dR iva-item-description-FDgK4 text-text-LurtD text-size-s-BxGpL') == None:
+                o_txt = ''
+            else:
+                o_txt = i.find('div',
+                               class_='iva-item-text-Ge6dR iva-item-description-FDgK4 text-text-LurtD text-size-s-BxGpL'
+                               ).get_text()
             # Площадь
             total_area = titl[titl.find(',')+1:titl.find('м²')]
             # этаж
             storeys = titl[titl.find('/')-1:titl.find('/')]
             # Всего этажей
             number_of_storeys = titl[titl.find('/')+1:titl.find('э')]
-            town = i.find('div', class_='geo-georeferences-SEtee text-text-LurtD text-size-s-BxGpL').find('span').get_text()
-            if i.find('span', class_='geo-address-fhHd0 text-text-LurtD text-size-s-BxGpL').find('span').get_text():
-                addr = i.find('span', class_='geo-address-fhHd0 text-text-LurtD text-size-s-BxGpL').find('span').get_text()
+            if i.find('div', class_='geo-georeferences-SEtee text-text-LurtD text-size-s-BxGpL') == None:
+                town = ''
             else:
+                town = i.find('div', class_='geo-georeferences-SEtee text-text-LurtD text-size-s-BxGpL').find('span').get_text()
+            if i.find('span', class_='geo-address-fhHd0 text-text-LurtD text-size-s-BxGpL') == None:
                 addr = ''
+            else:
+                addr = i.find('span', class_='geo-address-fhHd0 text-text-LurtD text-size-s-BxGpL').find(
+                    'span').get_text()
             print(addr)
-            data.append({
-                'id': nid,
-                'link': link , 'title': titl, 'txt': o_txt,
-                'town': town, 'addres': addr, 'total_area': total_area,
-                'storeys': storeys, 'number_of_storeys': number_of_storeys
-            })
+            data.append(dict(id=nid, link=link, title=titl, txt=o_txt, town=town, addres=addr, total_area=total_area,
+                             storeys=storeys, number_of_storeys=number_of_storeys))
             # pdfF = pdfkit.from_url(link, False)
             # pdfkit.from_url(pdfF, '1.pdf')
 print(data)
