@@ -29,6 +29,7 @@ def get_content(html):
             'uah_price': uah_price,
             'city': item.find('svg', class_='svg_i16_pin').find_next('span').get_text(),
         })
+        print(cars)
     return cars
 
 
