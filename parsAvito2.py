@@ -76,18 +76,19 @@ for p in range(1, int(pn2)+1):
             if i.find('div', class_='geo-georeferences-SEtee text-text-LurtD text-size-s-BxGpL') == None:
                 town = ''
             else:
-                town = i.find('div', class_='geo-georeferences-SEtee text-text-LurtD text-size-s-BxGpL').find('span').get_text()
+                town = i.find('div', class_='geo-georeferences-SEtee text-text-LurtD text-size-s-BxGpL').find(
+                    'span').get_text()
             if i.find('span', class_='geo-address-fhHd0 text-text-LurtD text-size-s-BxGpL') == None:
                 addr = ''
             else:
                 addr = i.find('span', class_='geo-address-fhHd0 text-text-LurtD text-size-s-BxGpL').find(
                     'span').get_text()
-            print(addr)
+            print(town, addr)
             data.append(dict(id=nid, link=link, title=titl, txt=o_txt, town=town, addres=addr, total_area=total_area,
                              storeys=storeys, number_of_storeys=number_of_storeys))
             # pdfF = pdfkit.from_url(link, False)
             # pdfkit.from_url(pdfF, '1.pdf')
 print(data)
 with open('data.json', 'w') as fout:
-    json.dump(data, fout)
+    json.dump(data, fout, ensure_ascii=False)
 
