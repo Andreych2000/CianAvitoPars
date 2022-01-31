@@ -49,7 +49,7 @@ print(pn2)
 #for p in range(1, int(pn2)+1):
 for p in range(1, 2):
     print(p)
-    url = f"https://www.avito.ru/murmanskaya_oblast/kvartiry/prodam-ASgBAgICAUSSA8YQ?cd=1&p={p}"
+    url = f"https://www.avito.ru/murmanskaya_oblast/kvartiry/sdam-ASgBAgICAUSSA8gQ?cd=1&p={p}"
     r = re.get(url, headers=random_headers())
     print(url)
     # генерим случайное число
@@ -134,6 +134,6 @@ for p in range(1, 2):
             # pdfF = pdfkit.from_url(link, False)
             # pdfkit.from_url(pdfF, '1.pdf')
 print(data)
-with open('avito.offers.json', 'w') as fout:
+with open('avito.offersRent.json', 'w') as fout:
     json.dump(data, fout, ensure_ascii=False)
 
