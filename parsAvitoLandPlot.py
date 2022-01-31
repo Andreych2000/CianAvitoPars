@@ -6,7 +6,7 @@ from time import sleep
 import json
 # import pdfkit
 # import imgkit
-# from html2image import Html2Image
+from html2image import Html2Image
 # from weasyprint import HTML
 
 DESKTOP_AGENTS = ['Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 '
@@ -33,7 +33,7 @@ HOST = 'https://www.avito.ru'
 # PATH_WK = r'/usr/bin/wkhtmltopdf' # Место установки
 # CONFIG = imgkit.config(wkhtmltopdf=PATH_WK)
 # hti = Html2Image()
-# hti = Html2Image(output_path='pdf')
+hti = Html2Image(output_path='pdf', size=(2500, 3500))
 data = []
 
 def random_headers():
@@ -51,14 +51,14 @@ pn1 = str(pg[7])
 print(pn1)
 pn2 = pn1[pn1.find('">')+2:pn1.find('</')]
 print(pn2)
-for p in range(1, int(pn2)+1):
-# for p in range(1, 3):
+# for p in range(1, int(pn2)+1):
+for p in range(1, 2):
     print(p)
     url = f"https://www.avito.ru/murmanskaya_oblast/zemelnye_uchastki?p={p}"
     r = re.get(url, headers=random_headers())
     print(url)
     # генерим случайное число
-    sl = randint(5, 30)
+    sl = randint(5, 20)
     print('Задержка'+' - '+str(sl)+' '+'секунд')
     sleep(sl)
     if r.status_code == 200:
@@ -69,7 +69,7 @@ for p in range(1, int(pn2)+1):
                                        'js-catalog-item-enum')
         print(len(s))
         for i in s:
-            sl = randint(5, 10)
+            sl = randint(1, 5)
             print('Задержка'+' - '+str(sl)+' '+'секунд')
             sleep(sl)
             link = HOST+i.find('a', class_='iva-item-sliderLink-uLz1v').get('href')
@@ -78,13 +78,18 @@ for p in range(1, int(pn2)+1):
             print(nid)
             titl = i.find('h3', class_='title-root-zZCwT iva-item-title-py3i_ title-listRedesign-_rejR '
                                        'title-root_maxHeight-X6PsH text-text-LurtD text-size-s-BxGpL '
-                                       'text-bold-SinUO').get_text().replace(' ', '').replace('\xa0', '')
+                                       'text-bold-SinUO').get_text().replace(' ', ' ').replace('\xa0', ' ')
             if i.find('div', class_='iva-item-text-Ge6dR iva-item-description-FDgK4 text-text-LurtD text-size-s-BxGpL') == None:
-                o_txt = ''
+                o_txt_t = ''
             else:
-                o_txt = i.find('div',
+                o_txt_t = i.find('div',
                                class_='iva-item-text-Ge6dR iva-item-description-FDgK4 text-text-LurtD text-size-s-BxGpL'
                                ).get_text()
+                xb0 = o_txt_t.replace('\xb2', ' ')
+                u20bd = xb0.replace('\u20bd', ' ')
+                xa0 = u20bd.replace('\xa0', ' ')
+                u2011 = xa0.replace('\u2011', ' ')
+                o_txt = u2011.replace('\n', '')
             sleep(sl)
             Surl = link
             Sr = re.get(Surl, allow_redirects=True, headers=random_headers())
@@ -93,9 +98,10 @@ for p in range(1, int(pn2)+1):
             with open(nameHTML, 'wb') as file:
                 file.write(Sr.content)
                 file.close()
-            sleep(1)
-            namePDF = 'pdf/'+nid+'.pdf'
-            HTML(Surl).write_pdf(namePDF)
+            # sleep(1)
+            namePNG = 'pdf/'+nid+'.pdf'
+            hti.screenshot(other_file=nameHTML, save_as=namePNG)
+            # HTML(Surl).write_pdf(namePDF)
             # print(namePDF)
             # pdfkit.from_url(Surl, namePDF, configuration=CONFIG)
             # pdfkit.from_file(nameHTML, namePDF)
