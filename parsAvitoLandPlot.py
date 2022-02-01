@@ -42,7 +42,7 @@ def random_headers():
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'}
 
 
-
+###########
 ro = re.get(URL, headers=random_headers())
 print(ro.status_code)
 so = BeautifulSoup(ro.text, 'lxml')
