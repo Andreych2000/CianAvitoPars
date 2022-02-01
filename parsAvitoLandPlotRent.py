@@ -145,7 +145,7 @@ for p in range(1, int(pn2)+1):
         else:
             print('Объектов нет')
 print(data)
-with open('avito.LandPlotSale.json', 'w') as fout:
+with open('avito.LandPlotRent.json', 'w') as fout:
     json.dump(data, fout, ensure_ascii=False)
 
 
