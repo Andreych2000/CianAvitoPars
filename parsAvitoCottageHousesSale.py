@@ -29,7 +29,7 @@ DESKTOP_AGENTS = ['Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML
                   'Safari/537.36',
                   'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0']
 
-URL = 'https://www.avito.ru/murmanskaya_oblast/zemelnye_uchastki/sdam-ASgBAgICAUSWA9wQ'
+URL = 'https://www.avito.ru/murmanskaya_oblast/doma_dachi_kottedzhi/prodam-ASgBAgICAUSUA9AQ'
 HOST = 'https://www.avito.ru'
 # PATH_WK = r'/usr/bin/wkhtmltopdf' # Место установки
 # CONFIG = imgkit.config(wkhtmltopdf=PATH_WK)
@@ -52,10 +52,10 @@ pn1 = str(pg[7])
 print(pn1)
 pn2 = pn1[pn1.find('">')+2:pn1.find('</')]
 print('Страниц :'+pn2)
-for p in range(1, int(pn2)+1):
-# for p in range(1, 2):
+# for p in range(1, int(pn2)+1):
+for p in range(1, 2):
     print(p)
-    url = f"https://www.avito.ru/murmanskaya_oblast/zemelnye_uchastki/sdam-ASgBAgICAUSWA9wQ?p={p}"
+    url = f"https://www.avito.ru/murmanskaya_oblast/doma_dachi_kottedzhi/prodam-ASgBAgICAUSUA9AQ?p={p}"
     r = re.get(url, headers=random_headers())
     print(url)
     # генерим случайное число
@@ -85,7 +85,7 @@ for p in range(1, int(pn2)+1):
                 sleep(1)
                 Sr = re.get(link, allow_redirects=True, headers=random_headers())
                 Ssoup = BeautifulSoup(Sr.text, 'lxml')
-                nid = link[link.rfind('_') + 1:]  # ид записи
+                nid = link[link.rfind('_')+1:] # ид записи
                 print(nid)
                 nameHTML = 'html/' + nid + '.html'
                 print(nameHTML)
@@ -95,8 +95,8 @@ for p in range(1, int(pn2)+1):
                 namePNG = nid + '.png'
                 hti.screenshot(other_file=nameHTML, save_as=namePNG)
                 if i.find('h3', class_='title-root-zZCwT iva-item-title-py3i_ title-listRedesign-_rejR '
-                                       'title-root_maxHeight-X6PsH text-text-LurtD text-size-s-BxGpL '
-                                       'text-bold-SinUO') is None:
+                                           'title-root_maxHeight-X6PsH text-text-LurtD text-size-s-BxGpL '
+                                           'text-bold-SinUO') is None:
                     titl = ''
                 else:
                     titl = i.find('h3', class_='title-root-zZCwT iva-item-title-py3i_ title-listRedesign-_rejR '
@@ -117,35 +117,54 @@ for p in range(1, int(pn2)+1):
                                                                            class_='item-address__string').get_text(
 
                     ).strip()
-                print('Адрес' + ' ' + addr)
-                if Ssoup.find('li', class_='item-params-list-item') is None:
+                print('Адрес'+' '+addr)
+                if Ssoup.find(lambda tag: tag.name == 'span' and 'Площадь участка:' in tag.text) is None:
                     total_area = ''
                 else:
-                    total_area = Ssoup.find('li',
-                                            class_='item-params-list-item').get_text().strip().replace('Площадь:', '')
-                print(total_area)
+                    total_area = Ssoup.find(lambda tag: tag.name == 'span' and 'Площадь участка:' in tag.text
+                                            ).parent.text.replace('Площадь участка: ', '').strip().replace('\xa0', ' ')
+                print('Площадь участка:', total_area)
+                if Ssoup.find(lambda tag: tag.name == 'span' and 'Площадь дома:' in tag.text) is None:
+                    house_area = ''
+                else:
+                    house_area = Ssoup.find(lambda tag: tag.name == 'span' and 'Площадь дома:' in tag.text
+                                            ).parent.text.replace('Площадь дома: ', '').strip().replace('\xa0', ' ')
+                print('Площадь дома:', house_area)
+                if Ssoup.find(lambda tag: tag.name == 'span' and 'Этажей в доме:' in tag.text) is None:
+                    number_of_storeys = ''
+                else:
+                    number_of_storeys = Ssoup.find(lambda tag: tag.name == 'span' and 'Этажей в доме:' in tag.text
+                                                   ).parent.text.replace('Этажей в доме: ', '').strip()
+                print('Этажей в доме:', number_of_storeys)
+                if Ssoup.find(lambda tag: tag.name == 'span' and 'Материал стен:' in tag.text) is None:
+                    object_walls = ''
+                else:
+                    object_walls = Ssoup.find(lambda tag: tag.name == 'span' and 'Материал стен:' in tag.text
+                                              ).parent.text.replace('Материал стен: ', '').strip().replace('\xa0' ,' ')
+                print('Материал стен:', object_walls)
                 if i.find('div', class_='iva-item-text-Ge6dR iva-item-description-FDgK4 text-text-LurtD '
                                         'text-size-s-BxGpL') is None:
-                    o_txt_t = ''
+                 o_txt_t = ''
                 else:
                     o_txt_t = i.find('div', class_='iva-item-text-Ge6dR iva-item-description-FDgK4 text-text-LurtD '
                                                    'text-size-s-BxGpL').get_text()
-                    xb0 = o_txt_t.replace('\xb2', ' ')
-                    u20bd = xb0.replace('\u20bd', ' ')
-                    xa0 = u20bd.replace('\xa0', ' ')
-                    u2011 = xa0.replace('\u2011', ' ')
-                    o_txt = u2011.replace('\n', '')
+                    xb0 = o_txt_t.replace('\xb2', '')
+                    u20bd = xb0.replace('\u20bd', '')
+                    xa0 = u20bd.replace('\xa0', '')
+                    u2011 = xa0.replace('\u2011', '')
+                    u2028 = u2011.replace('\u2028', '')
+                    o_txt = u2028.replace('\n', '')
                     print(o_txt)
                     object_type = 0
                     data.append(dict(ADDRESS_CITY='', ADDRESS_FULL=addr, DESCRIPTION=o_txt, OBJECT_FLOUR='',
-                                     OBJECT_FLOUR_COUNT='', OBJECT_SQUARE=total_area,
-                                     OBJECT_TYPE=object_type,
-                                     OFFER_COPY_FILENAME=fileName, OFFER_TYPE='аренда', SITE_SOURCE='Авито',
+                                     OBJECT_FLOUR_COUNT=number_of_storeys, OBJECT_SQUARE=total_area,
+                                     HOUSE_SQUARE=house_area, OBJECT_TYPE=object_type, OBJECT_WALLS=object_walls,
+                                     OFFER_COPY_FILENAME=fileName, OFFER_TYPE='продажа', SITE_SOURCE='Авито',
                                      TITLE=titl, PRICE=total_price, URL=link, UUID=nid))
         else:
             print('Объектов нет')
 print(data)
-with open('avito.LandPlotSale.json', 'w') as fout:
+with open('avito.CottageHouseSale.json', 'w') as fout:
     json.dump(data, fout, ensure_ascii=False)
 
 

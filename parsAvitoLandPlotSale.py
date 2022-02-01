@@ -94,18 +94,35 @@ for p in range(1, int(pn2)+1):
                     file.close()
                 namePNG = nid + '.png'
                 hti.screenshot(other_file=nameHTML, save_as=namePNG)
-                titl = i.find('h3', class_='title-root-zZCwT iva-item-title-py3i_ title-listRedesign-_rejR '
+                if i.find('h3', class_='title-root-zZCwT iva-item-title-py3i_ title-listRedesign-_rejR '
                                            'title-root_maxHeight-X6PsH text-text-LurtD text-size-s-BxGpL '
-                                           'text-bold-SinUO').get_text().replace(' ', ' ').replace('\xa0', ' ')
+                                           'text-bold-SinUO') is None:
+                    titl = ''
+                else:
+                    titl = i.find('h3', class_='title-root-zZCwT iva-item-title-py3i_ title-listRedesign-_rejR '
+                                               'title-root_maxHeight-X6PsH text-text-LurtD text-size-s-BxGpL '
+                                               'text-bold-SinUO').get_text().replace(' ', ' ').replace('\xa0', ' ')
                 print(titl)
-                total_price = Ssoup.find('div', class_='item-price-wrapper').find('span', class_='js-item-price').get(
-                 'content')
+                if Ssoup.find('div', class_='item-price-wrapper').find('span', class_='js-item-price') is None:
+                    total_price = ''
+                else:
+                    total_price = Ssoup.find('div',
+                                             class_='item-price-wrapper').find('span',
+                                                                               class_='js-item-price').get('content')
                 print('Цена' + ' ' + total_price)
-                addr = Ssoup.find('div', {'itemprop': 'address'}).find('span', class_='item-address__string').get_text(
+                if Ssoup.find('div', {'itemprop': 'address'}).find('span', class_='item-address__string') is None:
+                    addr = ''
+                else:
+                    addr = Ssoup.find('div', {'itemprop': 'address'}).find('span',
+                                                                           class_='item-address__string').get_text(
 
-                ).strip()
+                    ).strip()
                 print('Адрес'+' '+addr)
-                total_area = Ssoup.find('li', class_='item-params-list-item').get_text().strip().replace('Площадь:', '')
+                if Ssoup.find('li', class_='item-params-list-item') is None:
+                    total_area = ''
+                else:
+                    total_area = Ssoup.find('li',
+                                            class_='item-params-list-item').get_text().strip().replace('Площадь:', '')
                 print(total_area)
                 if i.find('div', class_='iva-item-text-Ge6dR iva-item-description-FDgK4 text-text-LurtD '
                                         'text-size-s-BxGpL') is None:
@@ -128,7 +145,7 @@ for p in range(1, int(pn2)+1):
         else:
             print('Объектов нет')
 print(data)
-with open('avito.LandPlotRent.json', 'w') as fout:
+with open('avito.LandPlotSale.json', 'w') as fout:
     json.dump(data, fout, ensure_ascii=False)
 
 
