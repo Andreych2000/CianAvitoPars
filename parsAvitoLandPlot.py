@@ -68,7 +68,7 @@ for i in s:
     print('Цена' + ' ' + total_price)
     addres = Ssoup.find('div', {'itemprop': 'address'}).find('span', class_='item-address__string').get_text().strip()
     print('Адрес'+' '+addres)
-    total_area = Ssoup.find('li', class_='item-params-list-item').get_text().strip().replace('Площадь:','')
+    total_area = Ssoup.find('li', class_='item-params-list-item').get_text().strip().replace('Площадь:', '')
     print(total_area)
     if i.find('div',
               class_='iva-item-text-Ge6dR iva-item-description-FDgK4 text-text-LurtD text-size-s-BxGpL') == None:
