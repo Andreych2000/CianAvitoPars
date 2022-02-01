@@ -29,7 +29,7 @@ DESKTOP_AGENTS = ['Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML
                   'Safari/537.36',
                   'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0']
 
-URL = 'https://www.avito.ru/murmanskaya_oblast/zemelnye_uchastki/sdam-ASgBAgICAUSWA9wQ'
+URL = 'https://www.avito.ru/murmanskaya_oblast/zemelnye_uchastki/prodam-ASgBAgICAUSWA9oQ'
 HOST = 'https://www.avito.ru'
 # PATH_WK = r'/usr/bin/wkhtmltopdf' # Место установки
 # CONFIG = imgkit.config(wkhtmltopdf=PATH_WK)
@@ -55,7 +55,7 @@ print('Страниц :'+pn2)
 for p in range(1, int(pn2)+1):
 # for p in range(1, 2):
     print(p)
-    url = f"https://www.avito.ru/murmanskaya_oblast/zemelnye_uchastki/sdam-ASgBAgICAUSWA9wQ?p={p}"
+    url = f"https://www.avito.ru/murmanskaya_oblast/zemelnye_uchastki/prodam-ASgBAgICAUSWA9oQ?p={p}"
     r = re.get(url, headers=random_headers())
     print(url)
     # генерим случайное число
@@ -123,7 +123,7 @@ for p in range(1, int(pn2)+1):
                     data.append(dict(ADDRESS_CITY='', ADDRESS_FULL=addr, DESCRIPTION=o_txt, OBJECT_FLOUR='',
                                      OBJECT_FLOUR_COUNT='', OBJECT_SQUARE=total_area,
                                      OBJECT_TYPE=object_type,
-                                     OFFER_COPY_FILENAME=fileName, OFFER_TYPE='аренда', SITE_SOURCE='Авито',
+                                     OFFER_COPY_FILENAME=fileName, OFFER_TYPE='продажа', SITE_SOURCE='Авито',
                                      TITLE=titl, PRICE=total_price, URL=link, UUID=nid))
         else:
             print('Объектов нет')
