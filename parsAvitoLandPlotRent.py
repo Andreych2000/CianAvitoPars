@@ -7,6 +7,7 @@ import json
 # import pdfkit
 # import imgkit
 from html2image import Html2Image
+import sys
 # from weasyprint import HTML
 
 DESKTOP_AGENTS = ['Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 '
@@ -73,8 +74,13 @@ for p in range(1, int(pn2)+1):
                                                                                      'items-item-My3ih '
                                                                                      'items-listItem-Gd1jN '
                                                                                      'js-catalog-item-enum')
-        print('Объектов :'+' '+ str(len(s)))
-        if s != 0:
+        print('Объектов :'+' '+str(len(s)))
+        if len(s) == 0:
+            # print(data)
+            # with open('avito.LandPlotRent.json', 'w') as fout:
+            #     json.dump(data, fout, ensure_ascii=False)
+            sys.exit("Закончили")
+        else:
             for i in s:
                 sl = randint(1, 5)
                 print('Задержка' + ' - ' + str(sl) + ' ' + 'секунд')
@@ -142,11 +148,9 @@ for p in range(1, int(pn2)+1):
                                      OBJECT_TYPE=object_type,
                                      OFFER_COPY_FILENAME=fileName, OFFER_TYPE='аренда', SITE_SOURCE='Авито',
                                      TITLE=titl, PRICE=total_price, URL=link, UUID=nid))
-        else:
-            print('Объектов нет')
-print(data)
-with open('avito.LandPlotRent.json', 'w') as fout:
-    json.dump(data, fout, ensure_ascii=False)
+            print(data)
+            with open('avito.LandPlotRent.json', 'w') as fout:
+                json.dump(data, fout, ensure_ascii=False)
 
 
 
