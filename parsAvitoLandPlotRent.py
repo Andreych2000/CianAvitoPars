@@ -76,9 +76,6 @@ for p in range(1, int(pn2)+1):
                                                                                      'js-catalog-item-enum')
         print('Объектов :'+' '+str(len(s)))
         if len(s) == 0:
-            # print(data)
-            # with open('avito.LandPlotRent.json', 'w') as fout:
-            #     json.dump(data, fout, ensure_ascii=False)
             sys.exit("Закончили")
         else:
             for i in s:
