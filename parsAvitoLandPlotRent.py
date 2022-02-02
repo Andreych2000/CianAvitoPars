@@ -82,9 +82,9 @@ for p in range(1, int(pn2)+1):
             sys.exit("Закончили")
         else:
             for i in s:
-                sl = randint(1, 5)
-                print('Задержка' + ' - ' + str(sl) + ' ' + 'секунд')
-                sleep(sl)
+                sl1 = randint(1, 5)
+                print('Задержка' + ' - ' + str(sl1) + ' ' + 'секунд')
+                sleep(sl1)
                 fileName = i.find('a', class_='iva-item-sliderLink-uLz1v').get('href')
                 link = HOST + fileName
                 print(link)
